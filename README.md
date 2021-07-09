@@ -25,4 +25,4 @@ The most classic game of all time is built with PyGame.
 </p>
 
 ### References:
-* [codewithharry]("https://www.codewithharry.com/")
+* [codewithharry](https://www.codewithharry.com/)
