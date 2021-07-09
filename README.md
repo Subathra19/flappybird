@@ -1,7 +1,7 @@
 # Flappy bird
 The most classic game of all time is built with PyGame.
-* **Objective:** Catch the maximum number of food items
-* **Rules:** Snake should not touch the boundaries or its body.
+* **Objective:** 
+* **Rules:** 
 
 ### Prerequisites
 * Python 3.0
