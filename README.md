@@ -1,7 +1,7 @@
 # Flappy bird
 The most classic game of all time is built with PyGame.
-* **Objective:** 
-* **Rules:** 
+* **Objective:** Pass though as many pipes as you can 
+* **Rules:** Don't hit the ground or pipes
 
 ### Prerequisites
 * Python 3.0
