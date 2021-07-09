@@ -14,7 +14,7 @@ from pygame.constants import KEYDOWN, K_UP
 # number of frames changing per second
 fps=32
 screen_width=280
-screen_height=560
+screen_height=570
 
 base_x=0
 base_y=screen_height * 0.8
@@ -39,8 +39,8 @@ pipe='images/pipe.png'
 ###########################################
 
 def welcome_screen():
-    flappy_x=int(screen_width/2)
-    flappy_y=int(screen_height* 0.2)
+    flappy_x=int(screen_width/4)
+    flappy_y=int(screen_height/1.7)
 
     # Place the message in center 
     message_x=int((screen_width-game_images["message"].get_width())/2)
@@ -102,7 +102,7 @@ def check_collision(flappy_x,flappy_y,lower_pipes,upper_pipes):
     # If flappy hits the upper pipe
     for pipe in upper_pipes:
         pipe_height=game_images["pipe"][0].get_height()
-        if(flappy_y<pipe_height) and abs(flappy_x - pipe["x"]) < game_images["pipe"][0].get_width():
+        if(flappy_y<pipe_height+pipe["y"]) and abs(flappy_x - pipe["x"]) < game_images["pipe"][0].get_width():
             game_sounds["hit"].play()
             return True
 
@@ -161,14 +161,64 @@ def game_screen():
             return
         
         # Update the scores
+        flappy_middle_position=flappy_x+game_images["flappy"].get_width()/2 
+        for pipe in upper_pipes:
+            pipe_middle_position=pipe["x"]+game_images["pipe"][0].get_width()/2 
+            if pipe_middle_position <= flappy_middle_position <pipe_middle_position+4:
+                score=score+1
+                game_sounds["points"].play()
+
+        # Movement of flappy
+        if flappy_velocity_y<flappy_velocity_y_max and not flapped:
+            flappy_velocity_y=flappy_velocity_y+flappy_acceleration_y
         
+        if flapped:
+            flapped=False
+        
+        flappy_height=game_images["flappy"].get_height()
+        # Change the position of flappy
+        flappy_y=flappy_y+ min(flappy_velocity_y, base_y-flappy_y-flappy_height)
+        
+        # Move pipes to the left
+        for lower,upper in zip(lower_pipes,upper_pipes):
+            lower["x"]=lower["x"]+pipe_velocity_x
+            upper["x"]=upper["x"]+pipe_velocity_x
+        
+        # Add a new pipe when the left most pipe is almost out of screen
+        if upper_pipes[0]["x"]>0 and upper_pipes[0]["x"]<5:
+            newpipe=get_random_pipe()
+            lower_pipes.append(newpipe[1])
+            upper_pipes.append(newpipe[0])
 
+        # Remove the pipe which is going out of screen
+        if upper_pipes[0]["x"] < -game_images["pipe"][0].get_width():
+            upper_pipes.pop(0)
+            lower_pipes.pop(0)
+        
+        # Blit images on screen
+        screen.blit(game_images["background"],(0,0))
 
+        for lower,upper in zip(lower_pipes,upper_pipes):
+            screen.blit(game_images["pipe"][1],(lower["x"],lower["y"]))
+            screen.blit(game_images["pipe"][0],(upper["x"],upper["y"]))
 
+        screen.blit(game_images["base"],(base_x,base_y))
+        screen.blit(game_images["flappy"],(flappy_x,flappy_y))
 
+        score_list=[int(x) for x in list(str(score))]
+        score_width=0
+        
+        for i in score_list:
+            score_width=score_width+game_images["numbers"][i].get_width()
 
+        offset_x= (screen_width-score_width)/2
+        
+        for i in score_list:
+            screen.blit(game_images["numbers"][i],(offset_x,screen_height*0.12))
+            offset_x=offset_x+game_images["numbers"][i].get_width()
 
-
+        pygame.display.update()
+        fps_clock.tick(fps)
 
 
 ###########################################
