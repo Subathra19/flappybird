@@ -21,7 +21,7 @@ The most classic game of all time is built with PyGame.
 
 ### Sample Screen
 <p align="center">
-  <img width="600" height="400" src="https://github.com/Subathra19/py_flappybird/blob/main/images/sample_screen.PNG">
+  <img width="300" height="550" src="https://github.com/Subathra19/py_flappybird/blob/main/images/sample_screen.PNG">
 </p>
 
 ### References:
